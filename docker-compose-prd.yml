@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  izing-redis:
+    container_name: "izing-redis"
+    image: "redis:latest"
+    restart: always
+    ports:
+      - "6379:6379"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - redis_data:/data
+
+  izing-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: "izing-rabbitmq"
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - $HOME/www/izing/database/rabbitmq/logs/:/var/log/rabbitmq/log
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+volumes:
+  rabbitmq_data:
+  redis_data:
